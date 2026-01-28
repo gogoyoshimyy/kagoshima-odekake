@@ -35,7 +35,12 @@ export default function Deck() {
             try {
                 const res = await fetch(`/api/events?mode=${mode || 'tourist'}`)
                 const data = await res.json()
-                setEvents(data)
+                if (Array.isArray(data)) {
+                    setEvents(data)
+                } else {
+                    console.error("API returned non-array:", data)
+                    setEvents([]) // Safe fallback
+                }
             } catch (e) {
                 console.error(e)
                 toast.error("イベントの取得に失敗しました")
