@@ -12,8 +12,23 @@ export default function SavedPage() {
     const [savedEvents, setSavedEvents] = useState<any[]>([])
 
     useEffect(() => {
-        const saved = JSON.parse(localStorage.getItem('kes_saved') || '[]')
-        setSavedEvents(saved)
+        try {
+            const raw = localStorage.getItem('kes_saved')
+            if (!raw) return
+            const saved = JSON.parse(raw)
+            if (Array.isArray(saved)) {
+                // Filter out invalid items (null, undefined, missing id)
+                const validEvents = saved.filter((e: any) => e && e.id)
+                setSavedEvents(validEvents)
+                // Optional: clean up LS if dirty
+                if (validEvents.length !== saved.length) {
+                    localStorage.setItem('kes_saved', JSON.stringify(validEvents))
+                }
+            }
+        } catch (e) {
+            console.error("Failed to parse saved events", e)
+            localStorage.setItem('kes_saved', '[]') // Reset if corrupt
+        }
     }, [])
 
     const removeEvent = (id: string, e: any) => {
