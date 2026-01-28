@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kagoshima Event Swipe
 
-## Getting Started
+鹿児島市内のイベントを直感的に探せる「Tinder風」Webサービス。
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Swipe Interface**: Like/Nope/Save gestures for events.
+- **Mode Selection**: Curated scoring based on User Persona (Housewife, Worker, Student, Tourist).
+- **Admin Panel**: Manage events, CRUD, CSV Import.
+- **Saved List**: Review saved events locally.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS + shadcn/ui
+- Prisma (SQLite)
+- Framer Motion
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Setup
 
-## Learn More
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Database Setup**
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev --name init
+   npx prisma db seed
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Run Local Server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Admin Access**
+   - URL: `/admin`
+   - Password: Defined in `.env` as `ADMIN_PASSWORD` (default: `admin123` if not set).
 
-## Deploy on Vercel
+## Deployment (Vercel)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Environment Variables on Vercel**:
+   - `ADMIN_PASSWORD`: Set your secret password.
+   - `DATABASE_URL`: For Vercel, you cannot use local SQLite for persistent data easily unless using Vercel Blob/Postgres.
+   - **IMPORTANT**: This project uses SQLite. On Vercel (Serverless), SQLite file is not persistent across deployments.
+   - **Recommended for Production**: Switch Prisma provider to Vercel Postgres or Neon.
+     - Update `prisma/schema.prisma`: `provider = "postgresql"`
+     - Update `.env` with Postgres URL.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Build Command**: `npm run build`
+
+## Project Structure
+
+- `src/app`: Page routes
+- `src/components`: UI components
+- `src/lib`: Utilities and Prisma client
+- `prisma`: Database schema and seeds
+
+## CSV Import Format
+Headers: `title`, `date` (YYYY-MM-DD HH:mm), `venue`, `area`, `price`, `desc`, `kids` (0/1), `indoor` (0/1)
