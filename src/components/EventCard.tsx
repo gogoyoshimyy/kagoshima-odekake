@@ -14,6 +14,8 @@ interface EventProps {
 }
 
 export default function EventCard({ event, dragHandlers }: EventProps) {
+    if (!event) return <div className="p-4 text-center">Loading...</div>
+
     return (
         <Card className="w-full h-full max-w-md mx-auto shadow-2xl overflow-hidden rounded-3xl relative bg-white flex flex-col pointer-events-auto select-none" {...dragHandlers}>
             {/* Detail Link */}

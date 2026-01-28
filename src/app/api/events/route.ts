@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
-import { Event } from '@prisma/client'
+// import prisma from '@/lib/prisma'
+// import { Event } from '@prisma/client'
 
 // Mock Data for Demo Fallback
 const MOCK_EVENTS = [
@@ -335,8 +335,13 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const mode = searchParams.get('mode')
 
-    let events = [];
+    let events: any[] = [];
 
+    // Force Mock Data Use for Vercel Demo
+    // Prisma import is commented out to prevent load-time crash
+    events = MOCK_EVENTS
+
+    /*
     try {
         events = await prisma.event.findMany({
             where: {
@@ -355,6 +360,7 @@ export async function GET(request: NextRequest) {
         console.log("Using Mock Data")
         events = MOCK_EVENTS
     }
+    */
 
     // Calculate scores
     const scoredEvents = events.map(event => ({
