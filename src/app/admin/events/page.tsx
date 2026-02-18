@@ -81,6 +81,9 @@ export default function AdminEvents() {
                                     </Badge>
                                 </td>
                                 <td className="px-4 py-3 flex gap-2">
+                                    <Button size="sm" variant="outline" onClick={() => {
+                                        window.location.href = `/admin/events/${e.id}`
+                                    }}>Edit</Button>
                                     <Button size="sm" variant="outline" onClick={() => toggleWildcard(e)}>Wild</Button>
                                     <Button size="sm" variant="destructive" onClick={() => deleteEvent(e.id)}>Del</Button>
                                 </td>

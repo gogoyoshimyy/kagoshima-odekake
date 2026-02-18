@@ -75,6 +75,11 @@ export default function EventCard({ event, dragHandlers }: EventProps) {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mt-1">
+                    {event.distance !== undefined && (
+                        <Badge variant="outline" className="border-blue-500 text-blue-500 bg-blue-50">
+                            現在地から {event.distance}km
+                        </Badge>
+                    )}
                     {event.indoor && <Badge variant="secondary">屋内</Badge>}
                     {event.kidsOk && <Badge variant="secondary">子連れOK</Badge>}
                     {event.parking && <Badge variant="secondary">Pあり</Badge>}
@@ -91,10 +96,7 @@ export default function EventCard({ event, dragHandlers }: EventProps) {
                     <div className="w-12 h-12 rounded-full border-2 border-red-400 text-red-400 flex items-center justify-center mb-1 bg-red-50">✕</div>
                     <span>パス</span>
                 </div>
-                <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 rounded-full border-2 border-blue-400 text-blue-400 flex items-center justify-center mb-1 bg-blue-50">保存</div>
-                    <span>キープ</span>
-                </div>
+
                 <div className="flex flex-col items-center">
                     <div className="w-12 h-12 rounded-full border-2 border-green-400 text-green-400 flex items-center justify-center mb-1 bg-green-50">♥</div>
                     <span>いいね</span>

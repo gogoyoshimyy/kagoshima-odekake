@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { db } from '@/lib/firebase-admin'
 
 export async function POST(request: NextRequest) {
     try {
@@ -10,15 +10,19 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Missing Required Fields' }, { status: 400 })
         }
 
-        const log = await prisma.swipeLog.create({
-            data: {
+        if (db) {
+            const docRef = await db.collection('swipes').add({
                 eventId,
                 action,
-                anonId
-            }
-        })
+                anonId,
+                createdAt: new Date()
+            })
+            return NextResponse.json({ id: docRef.id, ...body })
+        } else {
+            console.log(`[MOCK SWIPE] Event: ${eventId}, Action: ${action}, User: ${anonId}`)
+            return NextResponse.json({ id: 'mock-id-' + Date.now(), ...body })
+        }
 
-        return NextResponse.json(log)
     } catch (error) {
         console.error(error)
         return NextResponse.json({ error: 'Failed to log swipe' }, { status: 500 })
