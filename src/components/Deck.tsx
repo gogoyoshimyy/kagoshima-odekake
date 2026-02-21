@@ -149,7 +149,11 @@ export default function Deck() {
     const nextEventWithDist = enrichEvent(nextEvent)
 
     return (
-        <div className="h-[90vh] w-full max-w-md mx-auto relative mt-4 perspective-1000">
+        <div className="h-[100dvh] w-full max-w-lg mx-auto relative pt-12 pb-24 px-4 perspective-2000 overflow-hidden flex flex-col">
+            {/* Header / Title */}
+            <div className="absolute top-0 left-0 w-full text-center z-30 pt-4">
+                <h1 className="text-xl font-black italic tracking-tighter premium-text-gradient uppercase">Kagoshima Events</h1>
+            </div>
 
             {/* Background Cards (Stack Effect) */}
             {nextEvent && (
@@ -162,10 +166,11 @@ export default function Deck() {
             <motion.div
                 drag
                 dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                dragElastic={0.6} // Rubber band effect
+                dragElastic={0.8} // More rubbery, premium feel
                 onDragEnd={onDragEnd}
                 animate={controls}
                 style={{ x, y, rotate }}
+                whileTap={{ scale: 1.02 }} // Slight scale on tap
                 className="w-full h-full p-2 absolute top-0 left-0 z-10 cursor-grab active:cursor-grabbing"
             >
                 <EventCard event={currentEventWithDist} />
@@ -179,10 +184,22 @@ export default function Deck() {
                 </motion.div>
             </motion.div>
 
-            {/* Manual Buttons for Accessibilty */}
-            <div className="absolute -bottom-16 left-0 w-full flex justify-center gap-4 z-20">
-                <Button variant="destructive" size="icon" className="h-14 w-14 rounded-full shadow-lg" onClick={() => handleSwipe('left')}>✕</Button>
-                <Button className="h-14 w-14 rounded-full shadow-lg bg-green-500 hover:bg-green-600" onClick={() => handleSwipe('right')}>♥</Button>
+            {/* Manual Buttons for Accessibility */}
+            <div className="fixed bottom-8 left-0 w-full flex justify-center gap-8 z-50">
+                <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-16 w-16 rounded-full shadow-xl bg-white/90 backdrop-blur-md border-none text-slate-400 active:scale-90 hover:text-rose-500 transition-all" 
+                    onClick={() => handleSwipe('left')}
+                >
+                    <span className="text-2xl font-light">✕</span>
+                </Button>
+                <Button 
+                    className="h-16 w-16 rounded-full shadow-2xl bg-gradient-to-br from-rose-500 to-orange-400 border-none text-white active:scale-95 hover:scale-105 transition-all shadow-rose-200/50" 
+                    onClick={() => handleSwipe('right')}
+                >
+                    <span className="text-3xl text-white">♥</span>
+                </Button>
             </div>
 
             {/* Link to Saved */}
