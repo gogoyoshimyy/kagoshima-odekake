@@ -146,5 +146,6 @@
 
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none; /* Prevent pull-to-refresh and back/forward swipe */
   }
 }

@@ -106,7 +106,7 @@ export default function Deck() {
     }
 
     const onDragEnd = (event: any, info: PanInfo) => {
-        const threshold = 100
+        const threshold = 80 // Reduced threshold for mobile snappiness
         if (info.offset.x > threshold) handleSwipe('right')
         else if (info.offset.x < -threshold) handleSwipe('left')
         else controls.start({ x: 0, y: 0 })
@@ -164,13 +164,14 @@ export default function Deck() {
 
             {/* Active Card */}
             <motion.div
-                drag
-                dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                dragElastic={0.8} // More rubbery, premium feel
+                drag="x" // Restrict to horizontal axis
+                dragDirectionLock // Ensure axis locking
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.6} // Premium weighted feel
                 onDragEnd={onDragEnd}
                 animate={controls}
-                style={{ x, y, rotate }}
-                whileTap={{ scale: 1.02 }} // Slight scale on tap
+                style={{ x, y, rotate, touchAction: 'pan-y' }} // pan-y allows vertical scroll in card
+                whileTap={{ scale: 1.02 }}
                 className="w-full h-full p-2 absolute top-0 left-0 z-10 cursor-grab active:cursor-grabbing"
             >
                 <EventCard event={currentEventWithDist} />
@@ -186,16 +187,16 @@ export default function Deck() {
 
             {/* Manual Buttons for Accessibility */}
             <div className="fixed bottom-8 left-0 w-full flex justify-center gap-8 z-50">
-                <Button 
-                    variant="outline" 
-                    size="icon" 
-                    className="h-16 w-16 rounded-full shadow-xl bg-white/90 backdrop-blur-md border-none text-slate-400 active:scale-90 hover:text-rose-500 transition-all" 
+                <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-16 w-16 rounded-full shadow-xl bg-white/90 backdrop-blur-md border-none text-slate-400 active:scale-90 hover:text-rose-500 transition-all"
                     onClick={() => handleSwipe('left')}
                 >
                     <span className="text-2xl font-light">✕</span>
                 </Button>
-                <Button 
-                    className="h-16 w-16 rounded-full shadow-2xl bg-gradient-to-br from-rose-500 to-orange-400 border-none text-white active:scale-95 hover:scale-105 transition-all shadow-rose-200/50" 
+                <Button
+                    className="h-16 w-16 rounded-full shadow-2xl bg-gradient-to-br from-rose-500 to-orange-400 border-none text-white active:scale-95 hover:scale-105 transition-all shadow-rose-200/50"
                     onClick={() => handleSwipe('right')}
                 >
                     <span className="text-3xl text-white">♥</span>
